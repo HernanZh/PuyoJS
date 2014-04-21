@@ -1,0 +1,24 @@
+{
+  "name": "Puyo Puyo JS",
+  "version": "0.0.0",
+  "authors": [
+    "Hernan Zhou <hernanzh@gmail.com>"
+  ],
+  "description": "Html5 Puyo Puyo game",
+  "main": "index.html",
+  "license": "-",
+  "homepage": "http://www.puyovs.net",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "https://github.com/jrburke/requirejs.git",
+    "jasmine": "git://github.com/pivotal/jasmine.git",
+    "mersenne-twister": "https://gist.github.com/300494.git"
+  }
+}
