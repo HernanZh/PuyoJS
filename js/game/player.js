@@ -62,7 +62,6 @@ define('puyojs/game/player', [
             },
             prepare = function () {
                 //Read colors and pop front after reading
-                console.log(currentColors);
                 currentColors = nextList.getNext();
                 nextList.addNewColorPair(colorsCount);
 

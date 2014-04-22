@@ -44,8 +44,12 @@ define('puyojs/components/base', [
                     return base;
                 },
                 extend: function (obj) {
+                    var prop;
                     for (prop in obj) {
                         if (obj.hasOwnProperty(prop)) {
+                            if (this.hasOwnProperty(prop)) {
+                                throw 'Object already has this property';
+                            }
                             this[prop] = obj[prop];
                         }
                     }

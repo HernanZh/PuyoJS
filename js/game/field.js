@@ -53,17 +53,17 @@ define('puyojs/game/field', [
                 if (element === null) {
                     return false;
                 } else {
-                    return Utils.isDefined(element.puyo);
+                    return Utils.isDefined(element.isPuyo);
                 }
             },
             isColorPuyo = function (puyo) {
                 if (puyo === null) {
                     return false;
                 }
-                if (!Utils.isDefined(puyo.puyo)) {
+                if (!Utils.isDefined(puyo.type)) {
                     return false;
                 }
-                return puyo.puyo.type() === Constants.Puyo.COLOR;
+                return puyo.type() === Constants.Puyo.COLOR;
             },
             isWithinBounds = function (x, y) {
                 if (x >= array.width() || x < 0 || y >= array.height() || y < 0) {
@@ -88,14 +88,14 @@ define('puyojs/game/field', [
                 }
                 // check down
                 neighbor = getPuyo(x, y - 1);
-                if (neighbor && isColorPuyo(neighbor) && !neighbor.puyo.isFalling() &&
+                if (neighbor && isColorPuyo(neighbor) && !neighbor.isFalling() &&
                     current.color() === neighbor.color() && y !== array.height() - 3) {
                     neighbor.setLink(Constants.Direction.UP);
                     current.setLink(Constants.Direction.DOWN);
                 }
                 //check up
                 neighbor = getPuyo(x, y + 1);
-                if (neighbor && isColorPuyo(neighbor) && !neighbor.puyo.isFalling() &&
+                if (neighbor && isColorPuyo(neighbor) && !neighbor.isFalling() &&
                     current.color() === neighbor.color() && y !== array.height() - 4) {
                     neighbor.setLink(Constants.Direction.DOWN);
                     current.setLink(Constants.Direction.UP);
@@ -103,7 +103,7 @@ define('puyojs/game/field', [
                 //check right
                 neighbor = getPuyo(x + 1, y);
                 if (neighbor && isColorPuyo(neighbor) && current.color() === neighbor.color()) {
-                    if (!neighbor.puyo.isFalling()) {
+                    if (!neighbor.isFalling()) {
                         neighbor.setLink(Constants.Direction.LEFT);
                         current.setLink(Constants.Direction.RIGHT);
                     } else {
@@ -114,7 +114,7 @@ define('puyojs/game/field', [
                 //check left
                 neighbor = getPuyo(x - 1, y);
                 if (neighbor && isColorPuyo(neighbor) && current.color() === neighbor.color()) {
-                    if (!neighbor.puyo.isFalling()) {
+                    if (!neighbor.isFalling()) {
                         neighbor.setLink(Constants.Direction.RIGHT);
                         current.setLink(Constants.Direction.LEFT);
                     } else {
@@ -164,7 +164,7 @@ define('puyojs/game/field', [
                 var element = array.get(x, y),
                     foundEmpty = false,
                     emptyY = y;
-                if (!isPuyo(x, y) || !element.puyo.isDroppable() || !isWithinBounds(x, y)) {
+                if (!isPuyo(x, y) || !element.isDroppable() || !isWithinBounds(x, y)) {
                     return y;
                 }
 
@@ -187,7 +187,7 @@ define('puyojs/game/field', [
                 //drop puyo down
                 array.set(x, emptyY, array.get(x, y));
                 array.set(x, y, null);
-                array.get(x, emptyY).puyo.setIndex(x, emptyY);
+                array.get(x, emptyY).setIndex(x, emptyY);
                 return emptyY;
             };
 
@@ -238,11 +238,11 @@ define('puyojs/game/field', [
                     fallDelay = 0;
                 }
                 array.set(x, y, puyo);
-                puyo.puyo.setField(field);
-                puyo.puyo.setIndex(x, y);
-                puyo.puyo.setPosition(indexToPos(x, y).add(puyo.origin()));
-                puyo.puyo.setFallState(fallFlag);
-                puyo.puyo.setFallDelay(fallDelay);
+                puyo.setField(field);
+                puyo.setIndex(x, y);
+                puyo.setPuyoPosition(indexToPos(x, y).add(puyo.origin()));
+                puyo.setFallState(fallFlag);
+                puyo.setFallDelay(fallDelay);
                 return true;
             },
             linkField: function () {
@@ -271,7 +271,7 @@ define('puyojs/game/field', [
                             }
                             // drop the sprite
                             pos = indexToPos(i, y - 1);
-                            puyo.puyo.fall(countDelay, pos.y);
+                            puyo.fall(countDelay, pos.y);
                             ++countDelay;
                         }
                     }
@@ -286,16 +286,16 @@ define('puyojs/game/field', [
                 for (i = 0; i < posy; ++i) {
                     if (isPuyo(x, y - i)) {
                         puyo = array.get(x, y - i);
-                        if (funFlag == 1 && puyo.puyo.hard() === true) {
+                        if (funFlag == 1 && puyo.hard() === true) {
                             //loop back up
                             for (j = 0; j <= i; j++) {
-                                array.get(x, y - i + j).puyo.setBottomY(y - i);
+                                array.get(x, y - i + j).setBottomY(y - i);
                             }
                             funFlag = 0;
                             break;
                         }
                         //default value
-                        puyo.puyo.setBottomY(0);
+                        puyo.setBottomY(0);
                     }
                     if (funFlag === 1 && y - i < 0)
                         funFlag = 0;
@@ -303,11 +303,11 @@ define('puyojs/game/field', [
                     // search for disconnect
                     // the count is what determines how many puyos disconnect
                     if (funFlag === 1 && count < 5) {
-                        if (puyo.puyo.fallState() === 0) {
+                        if (puyo.fallState() === 0) {
                             unsetLinkAll(x, y - i);
                             // Set bouncemultiplier
-                            puyo.puyo.setBounceMultiplier(1 / Math.pow(2, count - 1));
-                            puyo.puyo.setBounceTimer(2);
+                            puyo.setBounceMultiplier(1 / Math.pow(2, count - 1));
+                            puyo.setBounceTimer(2);
                         }
                         count++;
                     }
@@ -322,7 +322,7 @@ define('puyojs/game/field', [
                 array.iterate(function (i, j, puyo) {
                     if (puyo) {
                         // check if any is bouncing falling or destroying
-                        if (puyo.puyo.bounceState() || puyo.puyo.fallState()) {
+                        if (puyo.bounceState() || puyo.fallState()) {
                             end = false;
                         }
                     }

@@ -8,9 +8,8 @@ define('puyojs/components/puyo', [
         toRadian = function (degree) {
             return Utils.toRadian(degree);
         };
-    return function (settings) {
+    return function (puyo, settings) {
         var type = settings.type,
-            parent = null,
             field = null,
             droppable = Utils.isDefined(settings.droppable) ? settings.droppable : true,
             indexX = Utils.isDefined(settings.indexX) ? settings.indexX : -1,
@@ -58,10 +57,7 @@ define('puyojs/components/puyo', [
                     bounceTimer += puyoBounceSpeed;
                 }
             };
-        return {
-            init: function (parentObj) {
-                parent = parentObj;
-            },
+        puyo.attach({
             update: function () {
                 // ready to drop
                 delayTimer += 0.5;
@@ -109,16 +105,16 @@ define('puyojs/components/puyo', [
                 }
 
                 // update transform
-                parent.setScale(scale);
-                parent.setPosition(Vector2(
+                puyo.setScale(scale);
+                puyo.setPosition(Vector2(
                     position.x,
                     position.y + bounceY
                 ));
-            },
-            position: function () {
-                return position;
-            },
-            setPosition: function (pos) {
+            }
+        });
+        puyo.extend({
+            isPuyo: true,
+            setPuyoPosition: function (pos) {
                 position = pos;
             },
             type: function () {
@@ -179,6 +175,7 @@ define('puyojs/components/puyo', [
             bounceState: function () {
                 return bounceState;
             }
-        };
+        });
+        return puyo;
     }
 });

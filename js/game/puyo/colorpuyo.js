@@ -22,12 +22,12 @@ define('puyojs/game/puyo/colorpuyo', [
             }),
             puyo = Base();
         // basepuyo component
-        puyo.attach(Puyo({
+        Puyo(puyo, {
             type: Constants.Puyo.COLOR,
             onBounceEnd: function (field) {
-                field.searchLink(puyo.puyo.indexX(), puyo.puyo.indexY());
+                field.searchLink(puyo.indexX(), puyo.indexY());
             }
-        }), 'puyo');
+        });
         // sprite
         puyo.attach(sprite, 'sprite');
         // set origin to bottom

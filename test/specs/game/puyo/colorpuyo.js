@@ -10,7 +10,7 @@ define([
             var puyo = ColorPuyo({
                 color: Constants.Color.GREEN
             });
-            expect(puyo.puyo).toBeTruthy();
+            expect(puyo).toBeTruthy();
             expect(puyo.color()).toEqual(Constants.Color.GREEN);
         });
     });
