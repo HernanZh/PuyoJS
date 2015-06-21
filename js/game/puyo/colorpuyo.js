@@ -46,50 +46,34 @@ define('puyojs/game/puyo/colorpuyo', [
             setLink: function (dir) {
                 switch (dir) {
                 case Constants.Direction.UP:
-                    {
-                        linkUp = true;
-                        break;
-                    }
+                    linkUp = true;
+                    break;
                 case Constants.Direction.DOWN:
-                    {
-                        linkDown = true;
-                        break;
-                    }
+                    linkDown = true;
+                    break;
                 case Constants.Direction.LEFT:
-                    {
-                        linkLeft = true;
-                        break;
-                    }
+                    linkLeft = true;
+                    break;
                 case Constants.Direction.RIGHT:
-                    {
-                        linkRight = true;
-                        break;
-                    }
+                    linkRight = true;
+                    break;
                 }
                 this.updateSprite();
             },
             unsetLink: function (dir) {
                 switch (dir) {
                 case Constants.Direction.UP:
-                    {
-                        linkUp = false;
-                        break;
-                    }
+                    linkUp = false;
+                    break;
                 case Constants.Direction.DOWN:
-                    {
-                        linkDown = false;
-                        break;
-                    }
+                    linkDown = false;
+                    break;
                 case Constants.Direction.LEFT:
-                    {
-                        linkLeft = false;
-                        break;
-                    }
+                    linkLeft = false;
+                    break;
                 case Constants.Direction.RIGHT:
-                    {
-                        linkRight = false;
-                        break;
-                    }
+                    linkRight = false;
+                    break;
                 }
                 this.updateSprite();
             }

@@ -3,7 +3,7 @@ define('puyojs/components/base', [
     'puyojs/utils'
 ], function (Transform, Utils) {
     'use strict';
-    return function () {
+    return function (settings) {
         var transform = Transform(),
             components = [],
             parent = null,

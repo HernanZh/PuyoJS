@@ -78,6 +78,14 @@ define('puyojs/game', [
 
         return {
             init: function (settings) {
+                var Puyo = Utils.Settings.Puyo,
+                    onLoad = function () {
+                        // create players        
+                        playerManager.addPlayer();
+
+                        // start game
+                        mainLoop();
+                    };
                 // init canvas
                 if ((canvas = document.getElementById('canvas')) === null) {
                     canvas = document.createElement('canvas');
@@ -94,19 +102,18 @@ define('puyojs/game', [
                 canvas.style.width = 640;
                 canvas.style.height = 480;
 
+                Puyo.width = settings.Puyo.width || 32;
+                Puyo.height = settings.Puyo.height || 32;
+                Puyo.spacingX = settings.Puyo.spacingX || 0;
+                Puyo.spacingY = settings.Puyo.spacingY || -4;
+
                 Loader.load({
                     images: {
-                        puyo: 'assets/puyo_aqua.png',
+                        puyo: 'assets/aqua.png',
                         allClear: 'assets/allclear.png',
                         chain: 'assets/chain.png'
                     }
-                }, function () {
-                    // create players        
-                    playerManager.addPlayer();
-
-                    // start game
-                    mainLoop();
-                });
+                }, onLoad);
             }
         };
     };

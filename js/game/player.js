@@ -89,8 +89,6 @@ define('puyojs/game/player', [
                 }
                 endPhase();
             };
-        player.attach(movePuyo, 'movePuyo');
-
         // initialize controller
         controller = Controller({
             keyUp: 38,
@@ -196,6 +194,7 @@ define('puyojs/game/player', [
 
             }
         });
+        player.attach(movePuyo, 'movePuyo');
 
         // public
         player.extend({

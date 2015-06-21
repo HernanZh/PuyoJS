@@ -194,8 +194,6 @@ define('puyojs/game/field', [
         initCanvas();
         field.attach({
             update: function () {
-                //temp: draw all the time
-                updateCanvas();
                 // update puyos
                 array.iterate(function (x, y, puyo) {
                     if (puyo) {
@@ -204,20 +202,50 @@ define('puyojs/game/field', [
                 });
             },
             draw: function (context) {
+                // temp: draw all the time
+                updateCanvas();
+                // temp: draw a grid
+                array.iterate(function (x, y, puyo) {
+                    var w = Settings.Puyo.width + Settings.Puyo.spacingX,
+                        h = Settings.Puyo.width + Settings.Puyo.spacingY;
+
+                    if (y >= 12) {
+                        return
+                    }
+                    context.fillStyle = 'rgb(128, 128, 128)';
+                    if ((x + y * width + y % 2) % 2 === 0) {
+                        context.fillStyle = 'rgb(160, 160, 160)';
+                    }
+                    context.fillRect(x * w, y * h, w, h);
+                });
+
+                // draw field canvas onto main canvas
                 context.drawImage(canvas, 0, 0);
             }
         });
         // public functions
         field.extend({
+            /*
+             * Is field empty at index x, y
+             */
             isEmpty: function (x, y) {
                 return isEmpty(x, y);
             },
+            /*
+             * Converts index x, y to world position
+             */
             indexToPos: function (x, y) {
                 return indexToPos(x, y);
             },
+            /*
+             * Retrieves object at index x, y
+             */
             get: function (x, y) {
                 return array.get(x, y);
             },
+            /*
+             * Counts non-empty entries
+             */
             count: function () {
                 var count = 0;
                 array.iterate(function (x, y, puyo) {
@@ -227,6 +255,13 @@ define('puyojs/game/field', [
                 });
                 return count;
             },
+            /*
+             * Adds puyo object to field
+             * @param {Number} x - hor index
+             * @param {Number} y - ver index
+             * @param {Puyo} puyo - puyo object
+             * @param {Bool} -
+             */
             addPuyo: function (x, y, puyo, fallFlag, offset, fallDelay) {
                 if (!Utils.isDefined(fallFlag)) {
                     fallFlag = 0;
